@@ -4,7 +4,8 @@ import { MouseEvent, useState, useEffect } from 'react'
 import { io } from 'socket.io-client'
 import Game from '../components/Game'
 
-const socket = io("https://secure-gorge-23609.herokuapp.com")
+// const socket = io("https://secure-gorge-23609.herokuapp.com")
+const socket = io("http://localhost:5000")
 
 const Home: NextPage = () => {
   const [games, setGames] = useState([])
@@ -20,6 +21,11 @@ const Home: NextPage = () => {
     socket.on("games", (data) => {
       setGames(data.games)
     })
+
+    return () => {
+      console.log(`Closing socket connection : ${socket.id}`)
+      socket.close()
+    }
   }, [socket])
 
   return (

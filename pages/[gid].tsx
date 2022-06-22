@@ -2,27 +2,49 @@ import { io } from 'socket.io-client'
 import { useRouter } from 'next/router'
 import TTCBoard from '../components/TTCBoard'
 import { GetServerSideProps, NextPage } from 'next'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, FormEvent, } from 'react'
+import Sidebar from '../components/Sidebar'
 
-const socket = io("https://secure-gorge-23609.herokuapp.com")
+// const socket = io("https://secure-gorge-23609.herokuapp.com")
+const socket = io("http://localhost:5000")
 
 interface Board<T> {
   [key: string]: T
 }
 
-type Props = {gid: string}
+type Props = {
+  gid: string
+}
+
+type Message = {
+  author: "You" | "Enemy",
+  message: string
+}
 
 const Game: NextPage<Props> = ({ gid }: Props) => {
   const router = useRouter()
+  const [messages, setMessages] = useState<Message[]>([])
   const [won, setWon] = useState<boolean|string|null>(null)
-  const [turn, setTurn] = useState<string|null>()
+  const [turn, setTurn] = useState<string|null>(null)
   const [started, setStarted] = useState<boolean>(false)
-  const [board, setBoard] = useState<Board<string|null>|null>()
+  const [board, setBoard] = useState<Board<string|null>|null>(null)
 
   const addMark = (position: string) => {
     if (board ? board[position] : null) return
     if (turn !== socket.id) return
     socket.emit("move", {position: position, player_id: socket.id, game_id: gid})
+  }
+
+  const sendMessage = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const message = e.currentTarget.message.value
+    socket.emit("message", {
+      message,
+      author: socket.id,
+      game_id: gid
+    })
+
+    e.currentTarget.reset()
   }
 
   useEffect(() => {
@@ -48,55 +70,36 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
 
     socket.on("result", data => {
       const {winner, game_id, marks} = data
-      console.log(game_id, winner, marks)
 
       if (game_id !== gid) return
       const my_mark =marks[socket.id]
-      if (winner == "draw") {
-        setWon('draw')
-      } else if (my_mark == winner) {
-        setWon(true)
-      } else {
-        setWon(false)
-      }
+      winner == "draw" ? setWon('draw') : setWon(my_mark == winner)
 
+      console.log(data.winner)
       socket.emit("destroy", { game_id: gid })
     })
 
     socket.on("full", () => {
       router.push("/")
     })
+
+    socket.on("message", (data: {game_id: string, message: string, author: string })=> {
+      if(data.game_id !== gid) return
+      let author: string = data.author == socket.id ? "You" : "Enemy"
+      console.log([...messages, {author, message: data.message} as Message])
+      setMessages([...messages, {author, message: data.message} as Message])
+    })
+
+    return () => {
+      console.log(`Closing socket connection : ${socket.id}`)
+      socket.close()
+    }
   }, [socket])
 
   return (
-    <div className='grid place-items-center p-5 h-screen'>
-      <div className='w-full max-w-[500px] text-center'>
-        {board && won == null && (
-          <TTCBoard board={board} addMark={addMark} />
-        )}
-
-        <div className='w-full mt-3'>
-          {won === null && (
-            <p>
-              {
-                !started 
-                  ? "Waiting for another player"
-                  : board 
-                    ?  turn == socket.id ? "Your turn" : "Waiting for other players turn"
-                    : null
-              }
-            </p>
-          )}
-          {won !== null && (
-            <div className='flex flex-col gap-5 items-center'>
-              <h1 className='text-2xl font-bold '>{won === true ? "You Won" : won === false? "You lost" : "Draw"} </h1>
-              <div>
-                <button className='px-5 py-2 bg-black text-white' onClick={() => window.location.reload()}>Restart</button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+    <div className='grid grid-cols-10 p-5 h-screen gap-10'>
+      <Sidebar messages={messages} sendMessage={sendMessage} />
+      <TTCBoard board={board} addMark={addMark} won={won} started={started} socket={socket} turn={turn} />
     </div>
   )
 }
