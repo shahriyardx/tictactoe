@@ -25,7 +25,7 @@ const Sidebar = ({ messages, sendMessage }: Props) => {
       </div>
 
       <form onSubmit={sendMessage} className="w-full">
-        <input type="text" className='w-full' name="message" />
+        <input type="text" className='w-full bg-zinc-800' name="message" />
       </form>
     </div>
   )

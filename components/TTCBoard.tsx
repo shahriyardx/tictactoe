@@ -16,39 +16,39 @@ type Props = {
 
 const TTCBoard = ({ board, addMark, won, started, socket, turn }: Props) => {
   return (
-    <div className='w-full text-center col-span-10 md:col-span-8 flex justify-center items-center'>
-      <div className='w-full '>
+    <div className='text-center col-span-10 md:col-span-8 flex justify-center items-center'>
+      <div className='w-full'>
         {board && won == null && (
-          <div className='w-full max-w-[500px] mx-auto aspect-square bg-zinc-200'>
+          <div className='w-full max-w-[500px] mx-auto aspect-square'>
             <div className='grid grid-cols-3'>
-              <div onClick={() => addMark("one")} className='tcell border-r-black border-b-black'>
+              <div onClick={() => addMark("one")} className='tcell !border-r-zinc-500 !border-b-zinc-500'>
                 {board["one"] && <XY mark={board["one"]} />}
               </div>
-              <div onClick={() => addMark("two")} className='tcell border-r-black border-b-black'>
+              <div onClick={() => addMark("two")} className='tcell !border-r-zinc-500 !border-b-zinc-500'>
                 {board["two"] && <XY mark={board["two"]} />}
               </div>
-              <div onClick={() => addMark("three")} className='tcell border-b-black'>
+              <div onClick={() => addMark("three")} className='tcell !border-b-zinc-500'>
                 {board["three"] && <XY mark={board["three"]} />}
               </div>
             </div>
 
             <div className='grid grid-cols-3'>
-              <div onClick={() => addMark("four")} className='tcell border-r-black border-b-black'>
+              <div onClick={() => addMark("four")} className='tcell !border-r-zinc-500 !border-b-zinc-500'>
                 {board["four"] && <XY mark={board["four"]} />}
               </div>
-              <div onClick={() => addMark("five")} className='tcell border-r-black border-b-black'>
+              <div onClick={() => addMark("five")} className='tcell !border-r-zinc-500 !border-b-zinc-500'>
                 {board["five"] && <XY mark={board["five"]} />}
               </div>
-              <div onClick={() => addMark("six")} className='tcell border-b-black'>
+              <div onClick={() => addMark("six")} className='tcell !border-b-zinc-500'>
                 {board["six"] && <XY mark={board["six"]} />}
               </div>
             </div>
 
             <div className='grid grid-cols-3'>
-              <div onClick={() => addMark("seven")} className='tcell border-r-black'>
+              <div onClick={() => addMark("seven")} className='tcell !border-r-zinc-500'>
                 {board["seven"] && <XY mark={board["seven"]} />}
               </div>
-              <div onClick={() => addMark("eight")} className='tcell border-r-black'>
+              <div onClick={() => addMark("eight")} className='tcell !border-r-zinc-500'>
                 {board["eight"] && <XY mark={board["eight"]} />}
               </div>
               <div onClick={() => addMark("nine")} className='tcell '>

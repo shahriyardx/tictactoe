@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply bg-zinc-700 text-zinc-300;
+  }
+}
+
 .tcell {
-  @apply border-2 aspect-square cursor-pointer p-5;
+  @apply border-2 border-transparent aspect-square cursor-pointer p-5;
 }
