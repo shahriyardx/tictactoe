@@ -3,9 +3,9 @@ import { useRouter } from 'next/router'
 import { MouseEvent, useState, useEffect } from 'react'
 import { io } from 'socket.io-client'
 import Game from '../components/Game'
+import { socketuri } from '../config'
 
-// const socket = io("https://secure-gorge-23609.herokuapp.com")
-const socket = io("http://localhost:5000")
+const socket = io(socketuri)
 
 const Home: NextPage = () => {
   const [games, setGames] = useState([])

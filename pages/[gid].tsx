@@ -4,9 +4,9 @@ import TTCBoard from '../components/TTCBoard'
 import { GetServerSideProps, NextPage } from 'next'
 import React, { useState, useEffect, FormEvent, } from 'react'
 import Sidebar from '../components/Sidebar'
+import { socketuri } from '../config'
 
-// const socket = io("https://secure-gorge-23609.herokuapp.com")
-const socket = io("http://localhost:5000")
+const socket = io(socketuri)
 
 interface Board<T> {
   [key: string]: T
