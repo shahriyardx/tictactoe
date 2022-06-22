@@ -5,7 +5,7 @@ import { io } from 'socket.io-client'
 import { useRouter } from 'next/router'
 import TTCBoard from '../components/TTCBoard'
 
-const socket = io("https://secure-gorge-23609.herokuapp.com/")
+const socket = io("https://secure-gorge-23609.herokuapp.com")
 
 interface Board<T> {
   [key: string]: T
