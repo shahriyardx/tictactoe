@@ -1,15 +1,13 @@
 import type { NextPage } from 'next'
-import { useForm, Resolver, SubmitHandler } from 'react-hook-form'
-
-type formValues = {
-  game_type: "public" | "private"
-}
+import { useRouter } from 'next/router'
+import { MouseEvent } from 'react'
 
 const Home: NextPage = () => {
-  const {register, handleSubmit}  = useForm<formValues>()
-
-  const startGame: SubmitHandler<formValues> = (data) => {
-    console.log(data)
+  const router = useRouter()
+  const startGame = (event: MouseEvent<HTMLButtonElement>)=> {
+    event.preventDefault()
+    const game_id = Math.floor(Math.random() * 10000000000)
+    router.push(`/${game_id}`)
   }
 
   return (
@@ -19,18 +17,15 @@ const Home: NextPage = () => {
           <h1 className='text-5xl font-bold text-center'>TIC TAC TOE</h1>
         </div>
         <div className='mt-10 max-w-xs mx-auto'>
-          <form onSubmit={handleSubmit(startGame)}>
-            <div className='flex flex-col gap-2'>
-              <label htmlFor="game_type">
-                Game Type
-              </label>
-              <select id="game_type" {...register("game_type")}>
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-              </select>
-            </div>
+          <form onSubmit={(e) => e.preventDefault()}>
             <div className='mt-5'>
-              <button type="submit" className='px-5 py-3 bg-black text-white w-full' >Start Game</button>
+              <button
+                onClick={startGame}
+                type="button" 
+                className='px-5 py-3 bg-black text-white w-full' 
+              >
+                Start Game
+              </button>
             </div>
           </form>
         </div>

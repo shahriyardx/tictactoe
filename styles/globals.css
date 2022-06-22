@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .tcell {
-  @apply border-2 aspect-square cursor-pointer;
+  @apply border-2 aspect-square cursor-pointer p-5;
 }
