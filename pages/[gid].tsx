@@ -100,7 +100,7 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
     socket.on("message", ({ game_id, author: author_id, message }: SocketMessage)=> {
       if(game_id !== gid) return
       let author = author_id == socket.id ? "You" : "Enemy"
-      setMessages((oldMessages) => [{author, message: message} as Message, ...oldMessages])
+      setMessages((oldMessages) => [...oldMessages, {author, message: message} as Message])
     })
 
     return () => {
