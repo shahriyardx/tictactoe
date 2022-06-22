@@ -74,8 +74,6 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
       if (game_id !== gid) return
       const my_mark =marks[socket.id]
       winner == "draw" ? setWon('draw') : setWon(my_mark == winner)
-
-      console.log(data.winner)
       socket.emit("destroy", { game_id: gid })
     })
 
