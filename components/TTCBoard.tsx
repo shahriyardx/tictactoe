@@ -16,7 +16,7 @@ type Props = {
 
 const TTCBoard = ({ board, addMark, won, started, socket, turn }: Props) => {
   return (
-    <div className='w-full text-center col-span-8 flex justify-center items-center'>
+    <div className='w-full text-center col-span-10 md:col-span-8 flex justify-center items-center'>
       <div className='w-full '>
         {board && won == null && (
           <div className='w-full max-w-[500px] mx-auto aspect-square bg-zinc-200'>

@@ -12,7 +12,7 @@ type Props = {
 
 const Sidebar = ({ messages, sendMessage }: Props) => {
   return (
-    <div className='col-span-2 flex flex-col justify-end'>
+    <div className='col-span-2 hidden md:flex flex-col justify-end'>
       <div className='flex flex-col gap-1 w-full overflow-hidden'>
         {messages.map((message, index) => {
           return (
