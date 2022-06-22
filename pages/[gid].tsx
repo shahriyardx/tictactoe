@@ -84,8 +84,7 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
     socket.on("message", (data: {game_id: string, message: string, author: string })=> {
       if(data.game_id !== gid) return
       let author: string = data.author == socket.id ? "You" : "Enemy"
-      console.log([...messages, {author, message: data.message} as Message])
-      setMessages([...messages, {author, message: data.message} as Message])
+      setMessages((oldMessages) => [...oldMessages, {author, message: data.message} as Message])
     })
 
     return () => {
