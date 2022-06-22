@@ -6,7 +6,7 @@ import React, { useState, useEffect, FormEvent, } from 'react'
 import Sidebar from '../components/Sidebar'
 import { socketuri } from '../config'
 
-const socket = io(socketuri)
+const socket = io(socketuri, { reconnection: true })
 
 interface Board<T> {
   [key: string]: T
