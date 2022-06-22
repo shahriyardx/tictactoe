@@ -12,10 +12,10 @@ type Props = {
   socket: any,
   started: boolean,
   turn: string | null | undefined,
-  gid: string,
+  restartGame: CallableFunction,
 }
 
-const TTCBoard = ({ board, addMark, won, started, socket, turn, gid }: Props) => {
+const TTCBoard = ({ board, addMark, won, started, socket, turn, restartGame }: Props) => {
   return (
     <div className='text-center col-span-10 md:col-span-8 flex justify-center items-center'>
       <div className='w-full'>
@@ -75,7 +75,7 @@ const TTCBoard = ({ board, addMark, won, started, socket, turn, gid }: Props) =>
             <div className='flex flex-col gap-5 items-center'>
               <h1 className='text-2xl font-bold '>{won === true ? "You Won" : won === false? "You lost" : "Draw"} </h1>
               <div>
-                <button className='px-5 py-2 bg-black text-white' onClick={() => socket.emit("join", { game_id: gid})}>Restart</button>
+                <button className='px-5 py-2 bg-black text-white' onClick={() => restartGame()}>Restart</button>
               </div>
             </div>
           )}

@@ -47,10 +47,17 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
     e.currentTarget.reset()
   }
 
+  const restartGame = () => {
+    setWon(null)
+    setStarted(false)
+    socket.emit("join", { game_id: gid})
+  }
+
   useEffect(() => {
     socket.emit("join", { game_id: gid})
 
     socket.on("joined", (data) => {
+      console.log(data.id !== gid)
       if (data.id !== gid) return 
       setTurn(data.turn)
       setBoard(data.board)
@@ -96,7 +103,7 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
   return (
     <div className='grid grid-cols-10 p-5 h-screen gap-10'>
       <Sidebar messages={messages} sendMessage={sendMessage} />
-      <TTCBoard board={board} addMark={addMark} won={won} started={started} socket={socket} turn={turn} gid={gid}/>
+      <TTCBoard board={board} addMark={addMark} won={won} started={started} socket={socket} turn={turn} restartGame={restartGame}/>
     </div>
   )
 }
