@@ -18,8 +18,8 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     socket.emit("list", {})
-    socket.on("games", (data) => {
-      setGames(data.games)
+    socket.on("games", ({ games }) => {
+      setGames(games)
     })
 
     return () => {

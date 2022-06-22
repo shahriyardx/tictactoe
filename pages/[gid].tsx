@@ -21,6 +21,12 @@ type Message = {
   message: string
 }
 
+type SocketMessage = {
+  game_id: string, 
+  message: string, 
+  author: string 
+}
+
 const Game: NextPage<Props> = ({ gid }: Props) => {
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
@@ -32,7 +38,7 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
   const addMark = (position: string) => {
     if (board ? board[position] : null) return
     if (turn !== socket.id) return
-    socket.emit("move", {position: position, player_id: socket.id, game_id: gid})
+    socket.emit("move", { position: position, player_id: socket.id, game_id: gid })
   }
 
   const sendMessage = (e: FormEvent<HTMLFormElement>) => {
@@ -56,31 +62,28 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
   useEffect(() => {
     socket.emit("join", { game_id: gid})
 
-    socket.on("joined", (data) => {
-      console.log(data.id !== gid)
-      if (data.id !== gid) return 
-      setTurn(data.turn)
-      setBoard(data.board)
+    socket.on("joined", ({id, turn, board }) => {
+      if (id !== gid) return
+
+      setTurn(turn)
+      setBoard(board)
     })
 
-    socket.on("start", data => {
-      if (data.game_id == gid) {
+    socket.on("start", ({ game_id }) => {
+      if (game_id == gid) {
         setStarted(true)
       }
     })
 
-    socket.on("board_update", data => {
-      if (data.game_id !== gid) return 
-      setBoard(data.board)
-      setTurn(data.turn)
+    socket.on("board_update", ({ game_id, board, turn }) => {
+      if (game_id !== gid) return 
+      setBoard(board)
+      setTurn(turn)
     })
 
-    socket.on("result", data => {
-      const {winner, game_id, marks} = data
-
+    socket.on("result", ({winner, game_id, marks}) => {
       if (game_id !== gid) return
-      const my_mark =marks[socket.id]
-      winner == "draw" ? setWon('draw') : setWon(my_mark == winner)
+      winner == "draw" ? setWon("draw") : setWon(marks[socket.id] == winner)
       socket.emit("destroy", { game_id: gid })
     })
 
@@ -88,10 +91,16 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
       router.push("/")
     })
 
-    socket.on("message", (data: {game_id: string, message: string, author: string })=> {
-      if(data.game_id !== gid) return
-      let author: string = data.author == socket.id ? "You" : "Enemy"
-      setMessages((oldMessages) => [{author, message: data.message} as Message, ...oldMessages])
+    socket.on("abandoned", ({ game_id }) => {
+      if (game_id == gid) {
+        router.push("/")
+      }
+    })
+
+    socket.on("message", ({ game_id, author: author_id, message }: SocketMessage)=> {
+      if(game_id !== gid) return
+      let author = author_id == socket.id ? "You" : "Enemy"
+      setMessages((oldMessages) => [{author, message: message} as Message, ...oldMessages])
     })
 
     return () => {
