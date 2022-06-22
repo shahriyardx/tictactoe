@@ -96,7 +96,7 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
   return (
     <div className='grid grid-cols-10 p-5 h-screen gap-10'>
       <Sidebar messages={messages} sendMessage={sendMessage} />
-      <TTCBoard board={board} addMark={addMark} won={won} started={started} socket={socket} turn={turn} />
+      <TTCBoard board={board} addMark={addMark} won={won} started={started} socket={socket} turn={turn} gid={gid}/>
     </div>
   )
 }
