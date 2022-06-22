@@ -91,18 +91,18 @@ const Game: NextPage<Props> = ({ gid }: Props) => {
     socket.on("message", (data: {game_id: string, message: string, author: string })=> {
       if(data.game_id !== gid) return
       let author: string = data.author == socket.id ? "You" : "Enemy"
-      setMessages((oldMessages) => [...oldMessages, {author, message: data.message} as Message])
+      setMessages((oldMessages) => [{author, message: data.message} as Message, ...oldMessages])
     })
 
     return () => {
       console.log(`Closing socket connection : ${socket.id}`)
       socket.close()
     }
-  }, [socket])
+  }, [gid, router])
 
   return (
     <div className='grid grid-cols-10 p-5 h-screen gap-10'>
-      <Sidebar messages={messages} sendMessage={sendMessage} />
+      <Sidebar messages={messages.slice(0, 10)} sendMessage={sendMessage} />
       <TTCBoard board={board} addMark={addMark} won={won} started={started} socket={socket} turn={turn} restartGame={restartGame}/>
     </div>
   )

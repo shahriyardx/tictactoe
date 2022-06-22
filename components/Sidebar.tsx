@@ -1,4 +1,5 @@
 import React, { FormEventHandler } from 'react'
+import { motion } from 'framer-motion'
 
 type Message = {
   author: "You" | "Enemy",
@@ -12,22 +13,22 @@ type Props = {
 
 const Sidebar = ({ messages, sendMessage }: Props) => {
   return (
-    <div className='col-span-2 hidden md:flex flex-col justify-end'>
-      <div className='flex flex-col gap-1 w-full overflow-hidden'>
+    <motion.div className='col-span-2 hidden md:flex flex-col justify-end'>
+      <motion.div layout className='flex flex-col gap-1 w-full overflow-hidden mb-3'>
         {messages.map((message, index) => {
           return (
-            <p key={index}>
+            <motion.p layout key={index} className="block">
               <span className='font-bold'>{message.author}: </span>
               <span>{message.message}</span>
-            </p>
+            </motion.p>
           )
         })}
-      </div>
+      </motion.div>
 
       <form onSubmit={sendMessage} className="w-full">
         <input type="text" className='w-full bg-zinc-800' name="message" />
       </form>
-    </div>
+    </motion.div>
   )
 }
 

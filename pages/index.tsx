@@ -26,7 +26,7 @@ const Home: NextPage = () => {
       console.log(`Closing socket connection : ${socket.id}`)
       socket.close()
     }
-  }, [socket])
+  }, [])
 
   return (
     <div className='mt-10 w-full max-w-[400px] mx-auto'>

@@ -66,7 +66,7 @@ const TTCBoard = ({ board, addMark, won, started, socket, turn, restartGame }: P
                 !started 
                   ? "Waiting for another player"
                   : board 
-                    ?  turn == socket.id ? "Your turn" : "Waiting for other players turn"
+                    ?  turn == socket.id ? "Your turn 🚀" : "Enemy turn 🕑"
                     : null
               }
             </p>
