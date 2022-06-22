@@ -1,9 +1,8 @@
-import { GetServerSideProps, NextPage } from 'next'
-import React, { useState, useEffect } from 'react'
-import XY from '../components/XY'
 import { io } from 'socket.io-client'
 import { useRouter } from 'next/router'
 import TTCBoard from '../components/TTCBoard'
+import { GetServerSideProps, NextPage } from 'next'
+import React, { useState, useEffect } from 'react'
 
 const socket = io("https://secure-gorge-23609.herokuapp.com")
 
