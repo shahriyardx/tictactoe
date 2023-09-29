@@ -1,21 +1,25 @@
 import { WsContext } from "@/socket/SocketContext"
 import React, { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { BiLoaderAlt } from "react-icons/bi"
+import { BiLoaderAlt, BiX, BiCircle } from "react-icons/bi"
+import toast from "react-hot-toast"
+import Modal from "@/components/Modal"
 
 const GamePlayer = () => {
   const ws = useContext(WsContext)
   const { gid } = useRouter().query
   const [uid, setUid] = useState("")
   const [started, setStarted] = useState(false)
+  const [finished, setFinished] = useState(false)
   const [board, setBoard] = useState(new Array(9).fill(""))
   const [currentTurn, setCurrentTurn] = useState("")
+  const [showModal, setShowModal] = useState(false)
+  const [winner, setWinner] = useState<string | null>("")
 
   const turn = (i: number) => {
-    if (currentTurn !== uid) {
-      return alert("Not your turn")
-    }
-    if (board[i] !== "") return alert("Please select a different slot")
+    if (finished) return
+    if (currentTurn !== uid) return toast.error("Not your turn")
+    if (board[i] !== "") return toast.error("Please select a different slot")
 
     const payload = {
       type: "move",
@@ -51,9 +55,19 @@ const GamePlayer = () => {
         setBoard(data.data.board)
         setCurrentTurn(data.data.current_turn)
       }
+
+      if (data.type == "game_finished") {
+        const game_data = data.data
+        setBoard(game_data.board)
+        setFinished(true)
+        setWinner(game_data.winner)
+        setShowModal(true)
+      }
     }
     ws?.addEventListener("message", listener)
-  }, [ws])
+
+    return () => ws?.removeEventListener("message", listener)
+  }, [ws, currentTurn])
   return (
     <main className="max-w-[400px] mx-auto px-5">
       <div className="py-3">
@@ -80,14 +94,25 @@ const GamePlayer = () => {
           {board.map((i, index) => (
             <div
               onClick={() => turn(index)}
-              className="border w-full aspect-square border-black"
+              className="border w-full aspect-square border-black grid place-items-center"
               key={index}
             >
-              {i}
+              {i == "X" ? (
+                <BiX className="text-5xl" />
+              ) : i == "O" ? (
+                <BiCircle className="text-4xl" />
+              ) : (
+                ""
+              )}
             </div>
           ))}
         </div>
       </div>
+
+      <Modal
+        isOpen={showModal}
+        state={winner == uid ? "winner" : winner === null ? "draw" : "looser"}
+      />
     </main>
   )
 }
