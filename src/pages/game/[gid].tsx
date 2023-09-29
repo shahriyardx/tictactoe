@@ -4,6 +4,7 @@ import { useRouter } from "next/router"
 import { BiLoaderAlt, BiX, BiCircle } from "react-icons/bi"
 import toast from "react-hot-toast"
 import Modal from "@/components/Modal"
+import DisconnectedModal from "@/components/DisconnectedModal"
 
 const GamePlayer = () => {
   const ws = useContext(WsContext)
@@ -15,6 +16,7 @@ const GamePlayer = () => {
   const [currentTurn, setCurrentTurn] = useState("")
   const [showModal, setShowModal] = useState(false)
   const [winner, setWinner] = useState<string | null>("")
+  const [disconnected, setDisconnected] = useState(false)
 
   const turn = (i: number) => {
     if (finished) return
@@ -62,6 +64,10 @@ const GamePlayer = () => {
         setFinished(true)
         setWinner(game_data.winner)
         setShowModal(true)
+      }
+
+      if (data.type == "oponent_disconnected") {
+        setDisconnected(true)
       }
     }
     ws?.addEventListener("message", listener)
@@ -113,6 +119,7 @@ const GamePlayer = () => {
         isOpen={showModal}
         state={winner == uid ? "winner" : winner === null ? "draw" : "looser"}
       />
+      <DisconnectedModal isOpen={disconnected} />
     </main>
   )
 }
