@@ -54,6 +54,8 @@ const Modal = ({ isOpen, state }: Props) => {
                     <p className="text-sm text-gray-500">
                       {state === "winner"
                         ? "You've won the match. Play again to beat others"
+                        : state === "draw"
+                        ? "It's a draw, better luck next time"
                         : "You've lost the match. Try again beat him in the next match"}
                     </p>
                   </div>
