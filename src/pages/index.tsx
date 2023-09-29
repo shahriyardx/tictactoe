@@ -1,12 +1,12 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
 import { useContext, useEffect, useState } from "react";
 import { WsContext } from "@/socket/SocketContext";
 import GameItem from "@/components/GameItem";
 import { Board } from "@/types/game";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const ws = useContext(WsContext);
+  const router = useRouter();
   const [games, setGames] = useState<Board[]>([]);
 
   const create_game = () => {
@@ -17,16 +17,34 @@ export default function Home() {
       ws.send(JSON.stringify(payload));
     }
   };
+
   useEffect(() => {
-    ws?.addEventListener("message", (event) => {
-      const data = JSON.parse(event.data)
+    const listener = (event: MessageEvent) => {
+      const data = JSON.parse(event.data);
+      if (!data.success) {
+        return alert(data.error_message);
+      }
+      
+      if (data.type === "connection") {
+        localStorage.setItem("user_id", data.data.user_id)
+      }
       if (data.type === "games") {
-        const games = data.data as Array<Board>
-        console.log(games)
+        const games = data.data as Array<Board>;
         setGames(games);
       }
-    });
-  }, [ws]);
+
+      if (data.type == "game_joined") {
+        const game_id =data.data.game_id;
+        router.push(`/game/${game_id}`);
+      }
+    }
+    ws?.addEventListener("message", listener);
+
+    return () => {
+      ws?.removeEventListener("message", listener)
+    }
+  }, [ws, router]);
+
   return (
     <main className="px-5">
       <div className="mt-10">
