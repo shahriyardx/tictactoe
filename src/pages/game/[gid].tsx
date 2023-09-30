@@ -96,11 +96,11 @@ const GamePlayer = () => {
       </div>
 
       <div className="mt-10">
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 bg-[url(/board.png)] bg-cover">
           {board.map((i, index) => (
             <div
               onClick={() => turn(index)}
-              className="border w-full aspect-square border-black grid place-items-center"
+              className="w-full aspect-square grid place-items-center"
               key={index}
             >
               {i == "X" ? (

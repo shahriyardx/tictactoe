@@ -3,6 +3,7 @@ import { WsContext } from "@/socket/SocketContext"
 import GameItem from "@/components/GameItem"
 import { Board } from "@/types/game"
 import { useRouter } from "next/router"
+import Image from "next/image"
 
 export default function Home() {
   const ws = useContext(WsContext)
@@ -54,9 +55,12 @@ export default function Home() {
   return (
     <main className="px-5">
       <div className="mt-10">
-        <h1 className="text-4xl font-bold text-center">Tic Tac Toe</h1>
-
         <div className="mt-5 max-w-[400px] mx-auto">
+          <div className="flex justify-center items-center">
+            <Image src="/banner.png" width={200} height={200} alt="banner" />
+          </div>
+          <h1 className="text-4xl font-bold text-center mb-5 mt-10">Tic Tac Toe</h1>
+
           <button
             onClick={() => create_game()}
             className="text-lg bg-black text-white text-center px-3 py-3 rounded-md w-full"
