@@ -33,7 +33,7 @@ const Home = () => {
           />
           <button
             onClick={handleSubmit}
-            className="px-3 py-2 bg-black text-white rounded-md mt-3"
+            className="px-3 py-2 bg-black text-white rounded-md mt-3 w-full"
           >
             Submit
           </button>
