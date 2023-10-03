@@ -91,8 +91,6 @@ const GamePlayer = () => {
       if (data.type == "game_update") {
         setBoard(game_data.board)
         setCurrentTurn(game_data.current_turn)
-
-        console.log(game_data)
       }
 
       if (data.type == "game_finished") {

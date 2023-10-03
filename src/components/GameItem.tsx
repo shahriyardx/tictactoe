@@ -6,7 +6,6 @@ type Props = {
 }
 
 const GameItem = ({ game_id }: Props) => {
-  console.log(game_id)
   const { ws } = useContext(WsContext)
 
   const join_game = (game_id: string) => {
