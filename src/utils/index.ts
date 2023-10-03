@@ -11,5 +11,5 @@ export const createAvatar = async (seed: string) => {
 }
 
 export const socket: { value: WebSocket | null } = {
-  value: null
+  value: null,
 }

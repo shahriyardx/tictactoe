@@ -41,13 +41,12 @@ const DisconnectedModal = ({ isOpen }: Props) => {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    <span className="text-red-600">
-                    Opps
-                    </span>
+                    <span className="text-red-600">Opps</span>
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Your oponent has been disconnected or left the game. Go home to play another match
+                      Your oponent has been disconnected or left the game. Go
+                      home to play another match
                     </p>
                   </div>
 

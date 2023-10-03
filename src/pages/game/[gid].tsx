@@ -103,7 +103,7 @@ const GamePlayer = () => {
         setDisconnected(true)
       }
     },
-    [user]
+    [user],
   )
 
   useEffect(() => {

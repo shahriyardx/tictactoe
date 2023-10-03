@@ -28,16 +28,12 @@ const WsProvider = ({ children }: Props) => {
     const name = localStorage.getItem("name")
 
     const query = new URLSearchParams()
-    if (name) {
-      query.append("name", name as string)
-    }
 
-    if (prevId) {
-      query.append("prevId", prevId)
-    }
+    if (name) query.append("name", name)
+    if (prevId) query.append("prevId", prevId)
 
     const url = new URL(
-      `${process.env.NEXT_PUBLIC_SOCKET_URL}?${query.toString()}`
+      `${process.env.NEXT_PUBLIC_SOCKET_URL}?${query.toString()}`,
     )
     const soc = new WebSocket(url.toString())
     socket = soc

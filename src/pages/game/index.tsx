@@ -7,7 +7,7 @@ import Header from "@/components/Header"
 import Container from "@/components/Container"
 
 export default function Game() {
-  const {ws, createWs } = useContext(WsContext)
+  const { ws, createWs } = useContext(WsContext)
 
   const router = useRouter()
   const [games, setGames] = useState<Board[]>([])
@@ -55,6 +55,13 @@ export default function Game() {
       createWs()
     }
   }, [ws, createWs])
+
+  useEffect(() => {
+    const name = localStorage.getItem("name")
+    if (!name) {
+      router.push("/")
+    }
+  }, [router])
 
   return (
     <Container>
