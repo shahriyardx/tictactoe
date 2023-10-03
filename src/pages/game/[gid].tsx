@@ -148,8 +148,8 @@ const GamePlayer = () => {
           winner == user.id
             ? "winner"
             : winner === oponent?.id
-            ? "draw"
-            : "looser"
+            ? "looser"
+            : "draw"
         }
       />
       <DisconnectedModal isOpen={disconnected} />
