@@ -83,7 +83,7 @@ const GamePlayer = () => {
       if (data.type === "game_started") {
         setCurrentTurn(game_data.current_turn)
         setStarted(game_data.started)
-        
+
         const op = game_data.players.find((p: Player) => p.id !== user.id)
         const player = {
           ...op,

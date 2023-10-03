@@ -37,7 +37,7 @@ const WsProvider = ({ children }: Props) => {
     )
     const soc = new WebSocket(url.toString())
     socket = soc
-    
+
     soc.addEventListener("open", () => {
       setWs(soc)
     })

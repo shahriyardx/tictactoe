@@ -31,6 +31,7 @@ const Chat = () => {
       form.reset()
     }
   }
+
   const messageHandler = (event: MessageEvent) => {
     const data = JSON.parse(event.data)
     if (!data.success) {
