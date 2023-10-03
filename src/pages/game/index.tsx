@@ -28,17 +28,19 @@ export default function Game() {
         return alert(data.error_message)
       }
 
+      const game_data = data.data
+
       if (data.type === "connection") {
-        localStorage.setItem("userId", data.data.user_id)
+        localStorage.setItem("userId", game_data.user_id)
       }
+
       if (data.type === "games") {
-        const games = data.data as Array<Board>
+        const games = game_data as Array<Board>
         setGames(games)
       }
 
       if (data.type == "game_joined") {
-        const game_data = data.data
-        router.push(`/game/${game_data.game_id}`)
+        router.push(`/game/${game_data}`)
       }
     }
     ws?.addEventListener("message", listener)
