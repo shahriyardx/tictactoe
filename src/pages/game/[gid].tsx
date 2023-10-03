@@ -1,15 +1,31 @@
 import { WsContext } from "@/socket/SocketContext"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { BiLoaderAlt, BiX, BiCircle } from "react-icons/bi"
+import { BiX, BiCircle } from "react-icons/bi"
 import toast from "react-hot-toast"
 import Modal from "@/components/Modal"
 import DisconnectedModal from "@/components/DisconnectedModal"
+import { Player } from "@/types/game"
+import GameHeader from "@/components/GameHeader"
+import { createAvatar } from "@/utils"
 
 const GamePlayer = () => {
   const ws = useContext(WsContext)
   const { gid } = useRouter().query
-  const [uid, setUid] = useState("")
+  const [user, setUser] = useState<Player & { avatar: string }>({
+    id: "",
+    name: "",
+    symbol: "",
+    avatar: "",
+  })
+
+  const [oponent, setOponent] = useState<Player & { avatar: string }>({
+    id: "",
+    name: "",
+    symbol: "",
+    avatar: "",
+  })
+
   const [started, setStarted] = useState(false)
   const [finished, setFinished] = useState(false)
   const [board, setBoard] = useState(new Array(9).fill(""))
@@ -19,8 +35,9 @@ const GamePlayer = () => {
   const [disconnected, setDisconnected] = useState(false)
 
   const turn = (i: number) => {
+    if (!started) return toast.error("Game not started yet.")
     if (finished) return
-    if (currentTurn !== uid) return toast.error("Not your turn")
+    if (currentTurn !== user.id) return toast.error("Not your turn")
     if (board[i] !== "") return toast.error("Please select a different slot")
 
     const payload = {
@@ -34,23 +51,39 @@ const GamePlayer = () => {
   }
 
   useEffect(() => {
-    const uid = localStorage.getItem("user_id")
-    if (uid) {
-      setUid(uid)
+    const uid = localStorage.getItem("userId") || ""
+    const name = localStorage.getItem("name") || ""
+    const main = async () => {
+      if (uid) {
+        setUser({
+          name,
+          id: uid,
+          symbol: "",
+          avatar: await createAvatar(uid),
+        })
+      }
     }
+
+    main()
   }, [])
 
-  useEffect(() => {
-    const listener = (event: MessageEvent) => {
+  const listener = useCallback(
+    async (event: MessageEvent) => {
       const data = JSON.parse(event.data)
       if (!data.success) {
         return alert(data.error_message)
       }
 
       if (data.type === "game_started") {
-        const game_data = data.data
+        const game_data = data.data.data
         setCurrentTurn(game_data.current_turn)
         setStarted(game_data.started)
+        const op = game_data.players.find((p: Player) => p.id !== user.id)
+        const player = {
+          ...op,
+          avatar: await createAvatar(op.id),
+        }
+        setOponent(player)
       }
 
       if (data.type == "game_update") {
@@ -69,30 +102,22 @@ const GamePlayer = () => {
       if (data.type == "oponent_disconnected") {
         setDisconnected(true)
       }
+    },
+    [user]
+  )
+
+  useEffect(() => {
+    if (ws) {
+      ws?.addEventListener("message", listener)
     }
-    ws?.addEventListener("message", listener)
 
     return () => ws?.removeEventListener("message", listener)
-  }, [ws, currentTurn])
+  }, [ws, listener])
+
   return (
     <main className="max-w-[400px] mx-auto px-5">
       <div className="py-3">
-        <div className="flex items-center justify-center gap-2 text-2xl font-bold">
-          {!started ? (
-            <>
-              <BiLoaderAlt className="animate-spin" />
-              <span>Waiting...</span>
-            </>
-          ) : (
-            <span
-              className={`${
-                currentTurn == uid ? "text-green-500" : "text-yellow-500"
-              }`}
-            >
-              {currentTurn == uid ? "Your turn" : "Other player's turn"}
-            </span>
-          )}
-        </div>
+        <GameHeader currentTurn={currentTurn} user={user} oponent={oponent} />
       </div>
 
       <div className="mt-10">
@@ -117,7 +142,13 @@ const GamePlayer = () => {
 
       <Modal
         isOpen={showModal}
-        state={winner == uid ? "winner" : winner === null ? "draw" : "looser"}
+        state={
+          winner == user.id
+            ? "winner"
+            : winner === oponent?.id
+            ? "draw"
+            : "looser"
+        }
       />
       <DisconnectedModal isOpen={disconnected} />
     </main>

@@ -1,8 +1,9 @@
-export type Symbol = "X" | "O"
+export type Symbol = "X" | "O" | string
 
 export type Player = {
     id: string
-    symbol: Symbol
+    name: string
+    symbol: string
 }
 
 export type Board = {

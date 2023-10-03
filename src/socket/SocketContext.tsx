@@ -10,13 +10,19 @@ const WsProvider = ({ children }: Props) => {
   const [ws, setWs] = useState<WebSocket | null>(null)
 
   const createWs = () => {
-    const prevId = localStorage.getItem("user_id")
+    const prevId = localStorage.getItem("userId")
+    const name = localStorage.getItem("name")
+
     const query = new URLSearchParams()
-    
+    query.append("name", name as string)
+
     if (prevId) {
       query.append("prevId", prevId)
     }
-    const url = new URL(`${process.env.NEXT_PUBLIC_SOCKET_URL}?${query.toString()}`)
+
+    const url = new URL(
+      `${process.env.NEXT_PUBLIC_SOCKET_URL}?${query.toString()}`
+    )
 
     return new WebSocket(url.toString())
   }
