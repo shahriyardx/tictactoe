@@ -36,7 +36,7 @@ const GamePlayer = () => {
 
   const turn = (i: number) => {
     if (!started) return toast.error("Game not started yet.")
-    if (finished) return
+    if (finished) return toast.error("Game finished")
     if (currentTurn !== user.id) return toast.error("Not your turn")
     if (board[i] !== "") return toast.error("Please select a different slot")
 
@@ -74,8 +74,9 @@ const GamePlayer = () => {
         return alert(data.error_message)
       }
 
+      const game_data = data.data
+  
       if (data.type === "game_started") {
-        const game_data = data.data.data
         setCurrentTurn(game_data.current_turn)
         setStarted(game_data.started)
         const op = game_data.players.find((p: Player) => p.id !== user.id)
@@ -87,8 +88,8 @@ const GamePlayer = () => {
       }
 
       if (data.type == "game_update") {
-        setBoard(data.data.board)
-        setCurrentTurn(data.data.current_turn)
+        setBoard(game_data.board)
+        setCurrentTurn(game_data.current_turn)
       }
 
       if (data.type == "game_finished") {

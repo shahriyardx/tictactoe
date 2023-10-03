@@ -37,8 +37,8 @@ export default function Game() {
       }
 
       if (data.type == "game_joined") {
-        const game_id = data.data.game_id
-        router.push(`/game/${game_id}`)
+        const game_data = data.data
+        router.push(`/game/${game_data.game_id}`)
       }
     }
     ws?.addEventListener("message", listener)
