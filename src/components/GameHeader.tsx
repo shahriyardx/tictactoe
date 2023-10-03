@@ -48,7 +48,7 @@ const GameHeader = ({ currentTurn, user, oponent }: Props) => {
   return (
     <div className="flex items-center justify-between bg-black p-3 rounded-md">
       <Profile user={user} currentTurn={currentTurn} />
-      {oponent && <Profile user={oponent} currentTurn={currentTurn} reverse />}
+      {oponent.id && <Profile user={oponent} currentTurn={currentTurn} reverse />}
     </div>
   )
 }
