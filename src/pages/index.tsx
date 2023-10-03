@@ -1,5 +1,4 @@
 import Container from "@/components/Container"
-import Header from "@/components/Header"
 import { WsContext } from "@/socket/SocketContext"
 import { useRouter } from "next/router"
 import React, { useContext, useEffect, useState } from "react"
@@ -29,7 +28,6 @@ const Home = () => {
     <Container>
       <div className="w-full h-screen grid place-items-center">
         <div className="w-full px-5">
-          <Header />
           <input
             className="w-full px-3 py-2 bg-zinc-700 text-white rounded-md"
             type="text"

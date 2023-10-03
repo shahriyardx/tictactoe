@@ -11,6 +11,7 @@ export default function Game() {
 
   const router = useRouter()
   const [games, setGames] = useState<Board[]>([])
+  const [onlinePlayer, setOnlinePlayer] = useState(0)
 
   const create_game = () => {
     if (ws) {
@@ -34,9 +35,13 @@ export default function Game() {
         localStorage.setItem("userId", game_data.user_id)
       }
 
-      if (data.type === "games") {
-        const games = game_data as Array<Board>
+      if (data.type === "lobby") {
+        const { games, online } = game_data as {
+          games: Array<Board>
+          online: number
+        }
         setGames(games)
+        setOnlinePlayer(online)
       }
 
       if (data.type == "game_joined") {
@@ -52,7 +57,7 @@ export default function Game() {
 
   useEffect(() => {
     if (ws && ws.readyState === 1) {
-      ws?.send(JSON.stringify({ type: "load_games" }))
+      ws?.send(JSON.stringify({ type: "lobby" }))
     } else {
       createWs()
     }
@@ -68,7 +73,7 @@ export default function Game() {
   return (
     <Container>
       <div className="mt-10">
-        <Header />
+        <Header online={onlinePlayer} />
 
         <button
           onClick={() => create_game()}

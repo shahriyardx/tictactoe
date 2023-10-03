@@ -1,12 +1,20 @@
+import Image from "next/image"
 import React from "react"
 
-const Header = () => {
+const Header = ({ online }: { online: number }) => {
   return (
     <div>
-      {/* <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center">
         <Image src="/banner.png" width={200} height={200} alt="banner" />
-      </div> */}
-      <h1 className="text-4xl font-bold text-center mb-5 mt-10">Tic Tac Toe</h1>
+      </div>
+      <div className="flex justify-between items-center mb-5 mt-10">
+        <h1 className="text-4xl font-bold text-center">
+          Tic Tac Toe
+        </h1>
+        <span>
+          Online: <span className="text-green-500">{online}</span>
+        </span>
+      </div>
     </div>
   )
 }
