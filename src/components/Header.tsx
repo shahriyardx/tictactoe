@@ -1,7 +1,7 @@
 import Image from "next/image"
 import React from "react"
 
-const Header = ({ online }: { online: number }) => {
+const Header = ({ readyState, online }: { online: number, readyState: number }) => {
   return (
     <div>
       <div className="flex justify-center items-center">
@@ -12,7 +12,7 @@ const Header = ({ online }: { online: number }) => {
           Tic Tac Toe
         </h1>
         <span>
-          Online: <span className="text-green-500">{online}</span>
+          Online: <span className="text-green-500">{readyState === 1 ? online : 'loading'}</span>
         </span>
       </div>
     </div>

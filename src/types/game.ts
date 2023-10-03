@@ -12,6 +12,7 @@ export type Board = {
   players: Array<Player>
   board: Array<number>
   current_turn?: string
+  started?: boolean
 }
 
 export type Boards = {

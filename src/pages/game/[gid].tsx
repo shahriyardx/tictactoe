@@ -13,6 +13,7 @@ import Container from "@/components/Container"
 const GamePlayer = () => {
   const { ws } = useContext(WsContext)
   const { gid } = useRouter().query
+
   const [user, setUser] = useState<Player & { avatar: string }>({
     id: "",
     name: "",
@@ -55,6 +56,7 @@ const GamePlayer = () => {
   useEffect(() => {
     const uid = localStorage.getItem("userId") || ""
     const name = localStorage.getItem("name") || ""
+
     const main = async () => {
       if (uid) {
         setUser({
@@ -81,6 +83,7 @@ const GamePlayer = () => {
       if (data.type === "game_started") {
         setCurrentTurn(game_data.current_turn)
         setStarted(game_data.started)
+        
         const op = game_data.players.find((p: Player) => p.id !== user.id)
         const player = {
           ...op,
@@ -95,7 +98,6 @@ const GamePlayer = () => {
       }
 
       if (data.type == "game_finished") {
-        const game_data = data.data
         setBoard(game_data.board)
         setFinished(true)
         setWinner(game_data.winner)
