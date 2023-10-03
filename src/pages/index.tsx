@@ -22,7 +22,7 @@ const Home = () => {
   return (
     <Container>
       <div className="w-full h-screen grid place-items-center">
-        <div className="w-full">
+        <div className="w-full px-5">
           <Header />
           <input
             className="w-full px-3 py-2 bg-zinc-700 text-white rounded-md"
