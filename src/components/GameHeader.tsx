@@ -17,6 +17,7 @@ const GameHeader = ({ currentTurn, user, oponent }: Props) => {
           width={35}
           height={35}
           alt="Avatar"
+          className="rounded-md"
         />
         <div className="flex flex-col justify-center">
           <span>{user.name}</span>
@@ -31,14 +32,8 @@ const GameHeader = ({ currentTurn, user, oponent }: Props) => {
       </div>
 
       {oponent.id && (
-        <div className="grid grid-cols-[35px,auto] gap-2">
-          <Image
-            src={oponent.avatar as string}
-            width={35}
-            height={35}
-            alt="Avatar"
-          />
-          <div className="flex flex-col justify-center">
+        <div className="grid grid-cols-[auto,35px] gap-2">
+          <div className="flex flex-col justify-center items-end">
             <span>{oponent.name}</span>
             <span className="text-xs">
               {currentTurn === oponent.id ? (
@@ -48,6 +43,13 @@ const GameHeader = ({ currentTurn, user, oponent }: Props) => {
               )}
             </span>
           </div>
+          <Image
+            src={oponent.avatar as string}
+            width={35}
+            height={35}
+            alt="Avatar"
+            className="rounded-md"
+          />
         </div>
       )}
     </div>
