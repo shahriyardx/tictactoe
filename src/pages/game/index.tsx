@@ -6,6 +6,7 @@ import { useRouter } from "next/router"
 import Header from "@/components/Header"
 import Container from "@/components/Container"
 import RequireAuth from "@/components/RequireAuth"
+import Chat from "@/components/chat/Chat"
 
 export default function Game() {
   const { ws, createWs } = useContext(WsContext)
@@ -68,8 +69,8 @@ export default function Game() {
 
   return (
     <RequireAuth>
-      <Container>
-        <div className="mt-10">
+      <Container className="relative">
+        <div className="pt-10 h-screen">
           <Header online={onlinePlayer} readyState={ws?.readyState || 3} />
 
           <button
@@ -85,6 +86,7 @@ export default function Game() {
             ))}
           </div>
         </div>
+        <Chat />
       </Container>
     </RequireAuth>
   )
