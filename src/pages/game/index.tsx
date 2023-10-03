@@ -7,7 +7,8 @@ import Header from "@/components/Header"
 import Container from "@/components/Container"
 
 export default function Game() {
-  const ws = useContext(WsContext)
+  const {ws, createWs } = useContext(WsContext)
+
   const router = useRouter()
   const [games, setGames] = useState<Board[]>([])
 
@@ -50,8 +51,10 @@ export default function Game() {
   useEffect(() => {
     if (ws && ws.readyState === 1) {
       ws?.send(JSON.stringify({ type: "load_games" }))
+    } else {
+      createWs()
     }
-  }, [ws])
+  }, [ws, createWs])
 
   return (
     <Container>

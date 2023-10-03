@@ -9,3 +9,7 @@ export const createAvatar = async (seed: string) => {
   const image = await avatar.png().toDataUri()
   return image
 }
+
+export const socket: { value: WebSocket | null } = {
+  value: null
+}

@@ -6,7 +6,7 @@ type Props = {
 };
 
 const GameItem = ({ game_id }: Props) => {
-  const ws = useContext(WsContext);
+  const { ws } = useContext(WsContext);
 
   const join_game = (game_id: string) => {
     if (ws) {

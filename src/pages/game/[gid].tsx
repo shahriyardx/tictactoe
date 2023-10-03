@@ -10,7 +10,7 @@ import GameHeader from "@/components/GameHeader"
 import { createAvatar } from "@/utils"
 
 const GamePlayer = () => {
-  const ws = useContext(WsContext)
+  const { ws } = useContext(WsContext)
   const { gid } = useRouter().query
   const [user, setUser] = useState<Player & { avatar: string }>({
     id: "",

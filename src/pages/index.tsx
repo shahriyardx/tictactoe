@@ -1,21 +1,27 @@
 import Container from "@/components/Container"
 import Header from "@/components/Header"
+import { WsContext } from "@/socket/SocketContext"
 import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 const Home = () => {
+  const { ws, createWs } = useContext(WsContext)
   const router = useRouter()
   const [username, setUsername] = useState("")
 
   useEffect(() => {
     const name = localStorage.getItem("name")
     if (name) {
+      if (!ws) {
+        createWs()
+      }
       router.push("/game")
     }
-  }, [router])
+  }, [router, createWs, ws])
 
   const handleSubmit = () => {
     localStorage.setItem("name", username)
+    createWs()
     router.push("/game")
   }
 

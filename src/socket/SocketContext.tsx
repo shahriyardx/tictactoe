@@ -1,20 +1,36 @@
 import React, { createContext, useEffect, useState } from "react"
 
-export const WsContext = createContext<WebSocket | null>(null)
+let socket: WebSocket | null = null
+
+export const WsContext = createContext<{
+  ws: WebSocket | null
+  createWs: () => void
+}>({ ws: null, createWs: () => {} })
 
 type Props = {
   children: React.ReactNode
 }
 
 const WsProvider = ({ children }: Props) => {
-  const [ws, setWs] = useState<WebSocket | null>(null)
+  const [ws, setWs] = useState<WebSocket | null>(socket)
 
   const createWs = () => {
+    if (socket && !ws) {
+      setWs(socket)
+      return
+    }
+
+    if (ws || socket) {
+      return
+    }
+
     const prevId = localStorage.getItem("userId")
     const name = localStorage.getItem("name")
 
     const query = new URLSearchParams()
-    query.append("name", name as string)
+    if (name) {
+      query.append("name", name as string)
+    }
 
     if (prevId) {
       query.append("prevId", prevId)
@@ -23,17 +39,19 @@ const WsProvider = ({ children }: Props) => {
     const url = new URL(
       `${process.env.NEXT_PUBLIC_SOCKET_URL}?${query.toString()}`
     )
+    const soc = new WebSocket(url.toString())
+    socket = soc
 
-    return new WebSocket(url.toString())
+    setWs(soc)
   }
 
   useEffect(() => {
-    const server = createWs()
-    setWs(server)
-    return () => server.close()
-  }, [])
+    return () => ws?.close()
+  }, [ws])
 
-  return <WsContext.Provider value={ws}>{children}</WsContext.Provider>
+  return (
+    <WsContext.Provider value={{ ws, createWs }}>{children}</WsContext.Provider>
+  )
 }
 
 export default WsProvider
