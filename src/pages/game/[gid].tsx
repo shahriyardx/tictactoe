@@ -8,6 +8,7 @@ import DisconnectedModal from "@/components/DisconnectedModal"
 import { Player } from "@/types/game"
 import GameHeader from "@/components/GameHeader"
 import { createAvatar } from "@/utils"
+import Container from "@/components/Container"
 
 const GamePlayer = () => {
   const { ws } = useContext(WsContext)
@@ -76,7 +77,7 @@ const GamePlayer = () => {
       }
 
       const game_data = data.data
-  
+
       if (data.type === "game_started") {
         setCurrentTurn(game_data.current_turn)
         setStarted(game_data.started)
@@ -105,7 +106,7 @@ const GamePlayer = () => {
         setDisconnected(true)
       }
     },
-    [user],
+    [user]
   )
 
   useEffect(() => {
@@ -117,7 +118,7 @@ const GamePlayer = () => {
   }, [ws, listener])
 
   return (
-    <main className="max-w-[400px] mx-auto px-5">
+    <Container>
       <div className="py-3">
         <GameHeader currentTurn={currentTurn} user={user} oponent={oponent} />
       </div>
@@ -153,7 +154,7 @@ const GamePlayer = () => {
         }
       />
       <DisconnectedModal isOpen={disconnected} />
-    </main>
+    </Container>
   )
 }
 
