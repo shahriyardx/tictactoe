@@ -13,7 +13,7 @@ const GameHeader = ({ currentTurn, user, oponent }: Props) => {
     <div className="flex items-center justify-between bg-black p-3 rounded-md">
       <div className="grid grid-cols-[35px,auto] gap-2">
         <Image
-          src={user.avatar as string}
+          src={(user.avatar as string) || "/pfp.png"}
           width={35}
           height={35}
           alt="Avatar"
@@ -44,7 +44,7 @@ const GameHeader = ({ currentTurn, user, oponent }: Props) => {
             </span>
           </div>
           <Image
-            src={oponent.avatar as string}
+            src={(oponent.avatar as string) || "/pfp.png"}
             width={35}
             height={35}
             alt="Avatar"
